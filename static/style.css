@@ -81,3 +81,19 @@ h1 {
     transform: scale(1.05);
     transition: 0.25s ease;
 }
+
+#clearButton {
+    width: 130px;
+    border: none;
+    border-radius: 10px;
+    background: #e74c3c;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#clearButton:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}

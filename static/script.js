@@ -1,6 +1,7 @@
 const questionInput = document.querySelector("#question");
 const chatBox = document.querySelector("#chatBox");
 const sendButton = document.querySelector("#sendButton");
+const clearButton = document.querySelector("#clearButton");
 
 sendButton.addEventListener("click", async function () {
     const question = questionInput.value;
@@ -36,4 +37,11 @@ questionInput.addEventListener("keydown", function(event){
     {
         sendButton.click();
     }
+});
+
+clearButton.addEventListener("click", async function () {
+    await fetch("/clear", {
+        method:"POST"
+    });
+    chatBox.innerHTML = `<div class="bot-message"><strong>AI Assistant</strong><br><br>Hello! How can I help you today?</div>`;
 });

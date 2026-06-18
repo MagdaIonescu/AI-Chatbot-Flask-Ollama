@@ -31,5 +31,16 @@ def ask():
     })
     return jsonify({"answer": answer})
 
+@app.route("/clear", methods=["POST"])
+def clear():
+    global chat_history
+    chat_history = [
+        {
+            "role": "system",
+            "content": "You are a friendly AI assistant. Answer in English using simple language. Keep answers concise and under 5 sentences unless more details are requested."
+        }
+    ]
+    return jsonify({"message": "Chat cleared"})
+
 if __name__ == "__main__":
     app.run(debug=True)
