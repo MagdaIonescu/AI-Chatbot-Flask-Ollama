@@ -3,21 +3,36 @@
     <head>
         <title>AI Chatbot</title>
         <link rel = "stylesheet" href="{{ url_for('static', filename='style.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     </head>
     <body>
         <div class = "container">
             <h1>AI Chatbot</h1>
+            <button id = "themeButton">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <div id = "chatBox">
                 <div class = "bot-message">Hello! How can I help you today?</div>
             </div>
             <div class = "upload-area">
                 <input type = "file" id="documentInput">
-                <button id = "uploadButton">Upload</button>
+                <label for="documentInput" id="browseButton">
+                    <i class="fa-solid fa-file"></i>
+                    Choose file
+                </label>
+                <span id="fileName"> No file selected</span>
+                <button id = "uploadButton">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
             </div>
             <div class = "input-area">
-                <input id ="question" type="text" placeholder="Type your question here!">
-                <button id ="clearButton">Clear Chat</button>
-                <button id ="sendButton">Send</button>
+                <input id = "question" type="text" placeholder="Type your question here!">
+                <button id = "clearButton">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                <button id = "sendButton">
+                    <i class = "fa-solid fa-paper-plane"></i>
+                </button>
             </div>
         </div>
         <script src = "{{ url_for('static', filename='script.js') }}"></script>
