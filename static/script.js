@@ -2,6 +2,8 @@ const questionInput = document.querySelector("#question");
 const chatBox = document.querySelector("#chatBox");
 const sendButton = document.querySelector("#sendButton");
 const clearButton = document.querySelector("#clearButton");
+const documentInput = document.querySelector("#documentInput");
+const uploadButton = document.querySelector("#uploadButton");
 
 sendButton.addEventListener("click", async function () {
     const question = questionInput.value;
@@ -44,4 +46,22 @@ clearButton.addEventListener("click", async function () {
         method:"POST"
     });
     chatBox.innerHTML = `<div class="bot-message"><strong>AI Assistant</strong><br><br>Hello! How can I help you today?</div>`;
+    documentInput.value = "";
+});
+
+uploadButton.addEventListener("click", async function () {
+    const file = documentInput.files[0];
+    if(!file)
+    {
+        allert("Please select a document!");
+        return;
+    }
+    const formData = new FormData();
+    formData.append("document", file);
+    const response = await fetch("/upload", {
+        method: "POST",
+        body: formData
+    });
+    const data = await response.json();
+    alert(data.message);
 });
