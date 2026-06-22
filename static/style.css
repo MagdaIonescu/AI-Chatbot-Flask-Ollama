@@ -202,11 +202,8 @@ h1 {
 }
 
 .dark-mode #browseButton{
-
     background:#2b2b2b;
-
     color:white;
-
     border:1px solid #444;
 }
 
@@ -234,4 +231,9 @@ h1 {
 
 .dark-mode .bot-message code{
     background:#444;
+}
+
+.bot-message{
+    white-space: normal;
+    line-height: 1.7;
 }
