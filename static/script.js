@@ -32,7 +32,7 @@ sendButton.addEventListener("click", async function () {
         })
     });
     const data = await response.json();
-    botMessage.innerHTML = "<strong>AI Assistant</strong><br><br>" + data.answer;
+    botMessage.innerHTML = "<strong>AI Assistant</strong><br><br>" + marked.parse(data.answer);
     chatBox.scrollTop = chatBox.scrollHeight;
 });
 
