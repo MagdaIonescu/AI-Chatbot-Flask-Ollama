@@ -13,6 +13,7 @@ Keep answers concise and under 5 sentences unless more details are requested.
 """
 CHUNK_SIZE = 1000
 uploaded_documents = {}
+uploaded_file_names = {}
 
 @app.route("/")
 def home():
@@ -39,9 +40,10 @@ def ask():
     if user_id in uploaded_documents and len(uploaded_documents[user_id]) > 0:
         best_chunk = ""
         best_score = 0
+        source_chunk = 0
         question_words = question.lower().split()
 
-        for chunk in uploaded_documents[user_id]:
+        for index, chunk in enumerate(uploaded_documents[user_id]):
             score = 0
 
             for word in question_words:
@@ -51,9 +53,14 @@ def ask():
             if score > best_score:
                 best_score = score
                 best_chunk = chunk
+                source_chunk = index + 1
 
         if best_chunk == "":
             best_chunk = uploaded_documents[user_id][0]
+        
+        print("\nQuestion:", question)
+        print("Best chunk:", source_chunk)
+        print("Score:", best_score)
 
         prompt = f"""Use the following document as the main source of information.
 
@@ -77,6 +84,9 @@ Question:
         messages = session["chat_history"]
     )
     answer = response["message"]["content"]
+
+    if user_id in uploaded_file_names:
+        answer += f"\n\n **Based on:** {uploaded_file_names[user_id]}"
 
     session["chat_history"].append({
         "role": "assistant",
@@ -106,6 +116,7 @@ def upload_document():
 
     user_id = session["user_id"]
     file = request.files["document"]
+    uploaded_file_names[user_id] = file.filename
 
     if file.filename.endswith(".txt"):
         text = file.read().decode("utf-8")
