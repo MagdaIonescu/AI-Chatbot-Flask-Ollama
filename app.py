@@ -38,29 +38,36 @@ def ask():
     question = request.json["question"]
 
     if user_id in uploaded_documents and len(uploaded_documents[user_id]) > 0:
-        best_chunk = ""
-        best_score = 0
-        source_chunk = 0
+        chunk_scores = []
         question_words = question.lower().split()
 
-        for index, chunk in enumerate(uploaded_documents[user_id]):
+        for chunk in uploaded_documents[user_id]:
             score = 0
 
             for word in question_words:
                 if len(word) > 3 and word in chunk.lower():
                     score = score + 1
 
-            if score > best_score:
-                best_score = score
-                best_chunk = chunk
-                source_chunk = index + 1
+            chunk_scores.append((score, chunk))
 
-        if best_chunk == "":
-            best_chunk = uploaded_documents[user_id][0]
-        
+        chunk_scores.sort(reverse=True)
+        top_chunks = []
+
+        for score, chunk in chunk_scores:
+            if score > 0:
+                top_chunks.append((score, chunk))
+            if len(top_chunks) == 3:
+                break
+                
+        context = ""
+         
+        for score, chunk in top_chunks:
+            context += chunk + "\n\n"
+
         print("\nQuestion:", question)
-        print("Best chunk:", source_chunk)
-        print("Score:", best_score)
+
+        for score, chunk in top_chunks:
+            print("Score:", score)
 
         prompt = f"""Use the following document as the main source of information.
 
@@ -68,7 +75,7 @@ If the document contains the answer, use it.
 If the document does not provide enough information, you may use your general knowledge to provide a helpful answer.
 
 Context:
-{best_chunk}
+{context}
 Question:
 {question}
 """
@@ -107,6 +114,9 @@ def clear():
     if user_id in uploaded_documents:
         del uploaded_documents[user_id]
 
+    if user_id in uploaded_file_names:
+        del uploaded_file_names[user_id]
+        
     return jsonify({"message": "Chat cleared"})
 
 @app.route("/upload", methods=["POST"])
